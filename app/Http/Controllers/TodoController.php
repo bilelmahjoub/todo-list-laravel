@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use App\Models\TodoModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+
 
 class TodoController extends Controller
 {
@@ -37,8 +39,10 @@ class TodoController extends Controller
             return  redirect()->route('todo.index')->withErrors($validator);
         }
         $todo = new TodoModel();
-        $todo->title =$request->get('title');
+        $todo->title = $request->get('title');
+        $todo->user()->associate(Auth::user());
         $todo->save();
+
 
          return redirect()->route('todo.index')->with('success' , 'Todo added successfully');
     }
